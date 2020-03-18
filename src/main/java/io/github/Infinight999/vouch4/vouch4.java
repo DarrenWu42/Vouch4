@@ -61,6 +61,8 @@ public class vouch4 extends JavaPlugin{
 			}
 			String command = "lp user "+targetPlayerName+" promote "+track;
 			getServer().dispatchCommand(getServer().getConsoleSender(), command);
+			command = "wg flushstates";
+			getServer().dispatchCommand(getServer().getConsoleSender(), command);
 			getConfig().set("vouchee-voucher-pairs."+targetPlayerID.toString(),senderID);
 			saveConfig();
 			sender.sendMessage("You have vouched for "+targetPlayerName+". You will be responsible if they break any rules.");
