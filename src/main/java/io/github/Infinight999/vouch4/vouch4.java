@@ -50,7 +50,7 @@ public class vouch4 extends JavaPlugin{
 			}
 			String targetPlayerName = args[0];
 			UUID targetPlayerID = getServer().getPlayerUniqueId(targetPlayerName);
-			Player targetPlayer = (getServer().getPlayer(targetPlayerID) == null) ? null : getServer().getPlayer(targetPlayerID);
+			Player targetPlayer = getServer().getPlayer(targetPlayerID);
 			if(targetPlayer == null){
 				sender.sendMessage("The target player isn't online");
 				return false;
