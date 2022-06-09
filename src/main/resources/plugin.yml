@@ -1,6 +1,6 @@
 main: io.github.Infinight999.vouch4.vouch4
 name: Vouch4
-version: 1.4
+version: 1.5
 author: Infinight999
 description: Allows online players to vouch for new players
 commands:
