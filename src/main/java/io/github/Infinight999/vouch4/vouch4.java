@@ -30,9 +30,7 @@ public class vouch4 extends JavaPlugin{
 			String userGroup = getConfig().getString("able-to-vouch-group");
 			String track = getConfig().getString("track");
 			String senderID = "0";
-			if(sender instanceof ConsoleCommandSender){
-				senderID = "console";
-			}
+			if(sender instanceof ConsoleCommandSender) senderID = "console";
 			if(sender instanceof Player) {
 				if(!getServer().getPlayer(sender.getName()).hasPermission(userGroup)){
 					sender.sendMessage("You need to be at least a user");
@@ -48,6 +46,7 @@ public class vouch4 extends JavaPlugin{
 				sender.sendMessage("Too many arguments, specify only one person");
 				return false;
 			}
+
 			String targetPlayerName = args[0];
 			UUID targetPlayerID = getServer().getPlayerUniqueId(targetPlayerName);
 			Player targetPlayer = getServer().getPlayer(targetPlayerID);
@@ -59,12 +58,15 @@ public class vouch4 extends JavaPlugin{
 				sender.sendMessage("The target player is already a user");
 				return false;
 			}
+
 			String command = "lp user "+targetPlayerName+" promote "+track;
 			getServer().dispatchCommand(getServer().getConsoleSender(), command);
 			command = "wg flushstates";
 			getServer().dispatchCommand(getServer().getConsoleSender(), command);
+			
 			getConfig().set("vouchee-voucher-pairs."+targetPlayerID.toString(),senderID);
 			saveConfig();
+
 			sender.sendMessage("You have vouched for "+targetPlayerName+". You will be responsible if they break any rules.");
 			return true;
 		}
@@ -77,6 +79,7 @@ public class vouch4 extends JavaPlugin{
 				sender.sendMessage("Too many arguments, specify only one person");
 				return false;
 			}
+
 			String targetPlayerName = args[0];
 			UUID targetPlayerID = getServer().getPlayerUniqueId(targetPlayerName);
 			String voucheePlayerID = getConfig().getString("vouchee-voucher-pairs."+targetPlayerID.toString());
@@ -84,6 +87,7 @@ public class vouch4 extends JavaPlugin{
 				sender.sendMessage("This person hasn't been vouched for yet.");
 				return false;
 			}
+			
 			String voucheePlayerName = getServer().getPlayer(UUID.fromString(voucheePlayerID)).getName();
 			sender.sendMessage("The player that vouched for "+targetPlayerName+" is "+voucheePlayerName);
 			return true;
