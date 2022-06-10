@@ -1,4 +1,4 @@
-new-player-group: group.guest
-able-to-vouch-group: group.user
+new-player-group-name: default
+able-to-vouch-group-name: user
 track: standard
 vouchee-voucher-pairs:
