@@ -74,13 +74,7 @@ public class vouch4 extends JavaPlugin{
 	public boolean handleVouch(CommandSender sender, String[] args){
 		String senderID = "0";
 			if(sender instanceof ConsoleCommandSender) senderID = "console";
-			if(sender instanceof Player) {
-				if(!permissions.playerInGroup((Player)sender, getConfig().getString("able-to-vouch-group"))){
-					sender.sendMessage("You need to be at least a user");
-					return false;
-				}
-				senderID = getServer().getPlayerUniqueId(sender.getName()).toString();
-			}
+			if(sender instanceof Player) senderID = getServer().getPlayerUniqueId(sender.getName()).toString();
 			if(args.length == 0){
 				sender.sendMessage("You need to specify a person");
 				return false;
