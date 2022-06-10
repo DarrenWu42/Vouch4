@@ -13,6 +13,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.milkbowl.vault.permission.Permission;
 
 public class vouch4 extends JavaPlugin{
+	final String newGroupconfig = "new-player-group-name";
+	final String userGroupconfig = "able-to-vouch-group-name";
+
 	Logger logger = null;
 	Permission permissions = null;
 	
@@ -20,10 +23,8 @@ public class vouch4 extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		logger = getLogger();
-		if(!loadComponents())
-			logger.severe("Vouch4 failed to be vouched for! Error resulted in Vouch4 not working");
-		else
-			logger.info("Vouch4 has been vouched for! Already vouched players can now vouch for new players.");
+		if(!loadComponents()) logger.severe("Vouch4 failed to be vouched for! Error resulted in Vouch4 not working");
+		else logger.info("Vouch4 has been vouched for! Already vouched players can now vouch for new players.");
 	}
 
 	//run when plugin is disabled
@@ -72,38 +73,37 @@ public class vouch4 extends JavaPlugin{
 
 	// handle vouch command
 	public boolean handleVouch(CommandSender sender, String[] args){
-		String senderID = "0";
-			if(sender instanceof ConsoleCommandSender) senderID = "console";
-			if(sender instanceof Player) senderID = getServer().getPlayerUniqueId(sender.getName()).toString();
-			if(args.length == 0){
-				sender.sendMessage("You need to specify a person");
-				return false;
-			}
-			if(args.length > 1) {
-				sender.sendMessage("Too many arguments, specify only one person");
-				return false;
-			}
+		String senderID = sender instanceof ConsoleCommandSender ? "console" :
+							sender instanceof Player ? ((Player)sender).getUniqueId().toString() : "0";
+		if(args.length == 0){
+			sender.sendMessage("You need to specify a person");
+			return false;
+		}
+		if(args.length > 1) {
+			sender.sendMessage("Too many arguments, specify only one person");
+			return false;
+		}
 
-			String targetPlayerName = args[0];
-			UUID targetPlayerID = getServer().getPlayerUniqueId(targetPlayerName);
-			Player targetPlayer = getServer().getPlayer(targetPlayerID);
-			if(targetPlayer == null){
-				sender.sendMessage("The target player isn't online");
-				return false;
-			}
-			if(!permissions.playerInGroup(targetPlayer, getConfig().getString("new-player-group"))){
-				sender.sendMessage("The target player is already a user");
-				return false;
-			}
+		String targetPlayerName = args[0];
+		UUID targetPlayerID = getServer().getPlayerUniqueId(targetPlayerName);
+		Player targetPlayer = getServer().getPlayer(targetPlayerID);
+		if(targetPlayer == null){
+			sender.sendMessage("The target player isn't online or doesn't exist");
+			return false;
+		}
+		if(!permissions.playerInGroup(targetPlayer, getConfig().getString(newGroupconfig))){
+			sender.sendMessage("The target player is already a user");
+			return false;
+		}
 
-			permissions.playerRemoveGroup(targetPlayer, getConfig().getString("new-player-group"));
-			permissions.playerAddGroup(targetPlayer, getConfig().getString("able-to-vouch-group"));
-			
-			getConfig().set("vouchee-voucher-pairs."+targetPlayerID.toString(),senderID);
-			saveConfig();
+		permissions.playerRemoveGroup(targetPlayer, getConfig().getString(newGroupconfig));
+		permissions.playerAddGroup(targetPlayer, getConfig().getString(userGroupconfig));
+		
+		getConfig().set("vouchee-voucher-pairs."+targetPlayerID.toString(),senderID);
+		saveConfig();
 
-			sender.sendMessage("You have vouched for "+targetPlayerName+". You will be responsible if they break any rules.");
-			return true;
+		sender.sendMessage("You have vouched for "+targetPlayerName+". You will be responsible if they break any rules.");
+		return true;
 	}
 
 	// handle vouchedfor command
