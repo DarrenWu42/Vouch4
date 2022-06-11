@@ -98,6 +98,8 @@ public class vouch4 extends JavaPlugin{
 
 		permissions.playerRemoveGroup(targetPlayer, getConfig().getString(newGroupconfig));
 		permissions.playerAddGroup(targetPlayer, getConfig().getString(userGroupconfig));
+
+		getServer().dispatchCommand(getServer().getConsoleSender(), "wg flushstates");
 		
 		getConfig().set("vouchee-voucher-pairs."+targetPlayerID.toString(),senderID);
 		saveConfig();
