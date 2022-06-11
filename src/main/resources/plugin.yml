@@ -3,7 +3,7 @@ name: Vouch4
 version: 2.0.1
 author: Infinight999
 description: Allows online players to vouch for new players
-depend: [WorldGuard] [Vault]
+depend: [WorldGuard, Vault]
 commands:
   vouch:
     description: command to vouch for a player
